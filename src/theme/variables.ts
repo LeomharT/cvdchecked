@@ -1,7 +1,7 @@
 export const variable = {
   white: "#fff",
   black: "#000",
-  
+
   primaryColor: "blue",
   secondaryColor: "#E91E63",
   error: "#F44336",
@@ -42,12 +42,16 @@ export const variable = {
   //header height for per page padding top value
   headerHeight: 118,
   //shadow customise
-  shadows:{
-    xs: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
-    sm: '0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 10px 15px -5px, rgba(0, 0, 0, 0.04) 0px 7px 7px -5px',
-    md: '0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px',
-    lg: '0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 28px 23px -7px, rgba(0, 0, 0, 0.04) 0px 12px 12px -7px',
-    xl: '0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 36px 28px -7px, rgba(0, 0, 0, 0.04) 0px 17px 17px -7px',
+  shadows: {
+    xs: "0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)",
+    sm:
+      "0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 10px 15px -5px, rgba(0, 0, 0, 0.04) 0px 7px 7px -5px",
+    md:
+      "0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px",
+    lg:
+      "0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 28px 23px -7px, rgba(0, 0, 0, 0.04) 0px 12px 12px -7px",
+    xl:
+      "0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0px 36px 28px -7px, rgba(0, 0, 0, 0.04) 0px 17px 17px -7px",
   },
   //font sizes
   fontSizeXs: 12,
@@ -55,7 +59,7 @@ export const variable = {
   fontSizeMd: 16,
   fontSizeLg: 18,
   fontSizeXl: 20,
-  
+
   //customise
   smmd: "@media (max-width: 670px)",
   mdlg: "@media (max-width: 1160px)",
@@ -75,8 +79,7 @@ export const variable = {
     "Apple Color Emoji",
     "Segoe UI Emoji",
     "Segoe UI Symbol",
-    "Noto Color Emoji",`
-  ,
+    "Noto Color Emoji",`,
   // fontFamily: 'Proxima Nova, -apple-system, Helvetica Neue, Arial, sans-serif',
   fontFamilyShort: "Proxima Nova",
   fontFamilyAdvanced: "PT Serif",
@@ -118,10 +121,26 @@ export const variable = {
   spacingLg: 20,
   spacingXl: 24,
 
+  spacer: 16,
+  spacer0: 0,
+  spacer1: 4,
+  spacer2: 8,
+  spacer3: 12,
+  spacer4: 16,
+  spacer5: 24,
+  spacer6: 28,
+  spacer7: 32,
+  spacer8: 36,
+  spacer9: 40,
+  spacer10: 44,
+  spacer11: 48,
+  spacer12: 60,
+  spacer13: 70,
+  spacer14: 90,
+
   //custom spacing
   formLabelSpaceXs: 10,
   formLabelSpaceSm: 20,
-
 
   //gap
   gap: 15,
@@ -142,7 +161,6 @@ export const variable = {
   breakpointMd: 992,
   breakpointLg: 1200,
   breakpointXl: 1400,
-  
 
   mobile: 768,
   mobileDown: "@media(max-width: 767px)",
@@ -175,10 +193,10 @@ export const variable = {
   boxShadow:
     "inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)",
   outlined: "2px auto rgba(19,124,189,.6)",
-  checkBoxScale:0.7,
-  checkBoxLabelLeft:-10,
-  lablePaddingLeft:0,
-  scaleNum:0.7
+  checkBoxScale: 0.7,
+  checkBoxLabelLeft: -10,
+  lablePaddingLeft: 0,
+  scaleNum: 0.7,
 };
 
 export default variable;
