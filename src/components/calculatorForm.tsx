@@ -34,6 +34,7 @@ export interface IComponentClassNames {
 
 const useStyles = createStyles({
   content: {
+    marginBottom: "50px",
     ".layout": {
       width: "100%",
       maxWidth: "960px",
@@ -60,13 +61,14 @@ const useStyles = createStyles({
       letterSpacing: "0.15px",
       fontSize: variable.fontSizeBase,
     },
-    ".mantine-NumberInput-root .mantine-NumberInput-label, .mantine-RadioGroup-root .mantine-RadioGroup-label, .mantine-TextInput-root .mantine-TextInput-label, .mantine-CheckboxGroup-root .mantine-CheckboxGroup-label": {
-      marginTop: variable.formLabelSpaceXs,
-      marginBottom: variable.formLabelSpaceXs,
-      fontSize: variable.fontSizeBase,
-      fontFamily: variable.fontFamily,
-      fontWeight: variable.fontWeightMedium,
-    },
+    ".mantine-NumberInput-root .mantine-NumberInput-label, .mantine-RadioGroup-root .mantine-RadioGroup-label, .mantine-TextInput-root .mantine-TextInput-label, .mantine-CheckboxGroup-root .mantine-CheckboxGroup-label":
+      {
+        marginTop: variable.formLabelSpaceXs,
+        marginBottom: variable.formLabelSpaceXs,
+        fontSize: variable.fontSizeBase,
+        fontFamily: variable.fontFamily,
+        fontWeight: variable.fontWeightMedium,
+      },
     ".mantine-Input-rightSection": {
       color: "#546E7A",
       letterSpacing: "0.15px",
@@ -286,6 +288,9 @@ const useStyles = createStyles({
         fontSize: variable.fontSizeBase,
         letterSpacing: 0,
         lineHeight: "20px",
+      },
+      "&:hover,&:focus,&:active": {
+        backgroundColor: "#B0BEC5",
       },
     },
   },
