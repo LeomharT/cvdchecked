@@ -85,17 +85,41 @@ const mantineTheme: MantineThemeOverride = {
         fontSize: variable.fontSizeBase,
       },
       '.horizontal': {
-        zIndex: 1,
+        // zIndex: 1,
         display: "flex",
         alignItems: "flex-start",
+        [variable.mobileDown]: {
+          flexDirection: "column",
+        },
         ".horizontal-center": {
           flex: 1,
         },
         '.horizontal-right': {
           width: "50%",
+          [variable.mobileDown]: {
+            width: "100%",
+          },
+          '&.or-type': {
+            [variable.smDown]: {
+              flexDirection: "column",
+            },
+            '& .mantine-Chip-root': {
+              '& .mantine-Chip-label': {
+                [variable.smDown]: {
+                  width: "100%",
+                  textAlign: "center",
+                },
+              }
+            }
+          },
         },
         '.mantine-InputWrapper-root': {
           marginTop: 0,
+        },
+        "&.show": {
+          "& .targetInfo": {
+            display: "inline-block",
+          }
         }
       }
     }
