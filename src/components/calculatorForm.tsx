@@ -78,12 +78,16 @@ const useStyles = createStyles({
       "& .mantine-Stepper-steps": {
         maxWidth: "780px",
         margin: "auto",
+        paddingLeft: "20px",
+        paddingRight: "20px",
       },
       "& .mantine-Stepper-content": {
         marginTop: "20px",
       },
       "& .mantine-Stepper-separator": {
-        backgroundColor: "transparent",
+        [variable.mobileUp]: {
+          backgroundColor: "transparent",
+        },
       },
       "& .mantine-Stepper-stepLabel": {
         maxWidth: "165px",
@@ -107,14 +111,23 @@ const useStyles = createStyles({
       paddingTop: variable.spacer4,
       marginTop: variable.spacer4,
       gap: 30,
+      [variable.mobileDown]: {
+        gap: 15,
+      },
       "& > div": {
         width: "40%",
         marginTop: variable.spacer1,
+        [variable.mobileDown]: {
+          width: "100%",
+        },
       },
     },
     ".horizontal-right": {
-      width: "60% !important",
+      width: "60%",
       marginTop: "0 !important",
+      [variable.mobileDown]: {
+        width: "100%",
+      },
     },
     ".mantine-Checkbox-inner": {
       transform: "none",
@@ -136,6 +149,9 @@ const useStyles = createStyles({
     ".mantine-InputWrapper-description": {
       position: "relative",
       top: 12,
+      [variable.mobileDown]: {
+        position: "static",
+      },
     },
     ".mantine-NumberInput-root": {
       marginBottom: 1.25 * variable.spacer,
@@ -256,6 +272,11 @@ const useStyles = createStyles({
     ".or-type": {
       display: "flex",
       gap: 16,
+      "& .or-type-left": {
+        [variable.smDown]: {
+          marginBottom: 0,
+        },
+      },
       "> div": {
         flex: 1,
       },
@@ -266,6 +287,9 @@ const useStyles = createStyles({
         position: "relative",
         top: "7px",
         color: "#79909C",
+        [variable.smDown]: {
+          position: "static",
+        },
       },
     },
     ".and-type": {
@@ -301,6 +325,7 @@ const useStyles = createStyles({
     backgroundColor: "#F5F5F5",
     paddingTop: variable.spacer5,
     paddingBottom: variable.spacer5,
+    marginTop: variable.spacer5,
   },
   recommendList: {},
 });
@@ -394,7 +419,7 @@ export default function Calculator() {
                   </div>
                 </div>
 
-                <div className="horizontal">
+                <div className="horizontal show">
                   <Label
                     labelName="Age"
                     labelRequired="*"
@@ -765,16 +790,18 @@ export default function Calculator() {
               label="Consider reclassification factors"
               description=""
             >
-              Step 2 content
+              <Stack className="layout">Step 2 form</Stack>
             </Stepper.Step>
             <Stepper.Step
               label="Discuss risk result & management"
               description=""
             >
-              Step 3 content
+              <Stack className="layout">Step 3 form</Stack>
             </Stepper.Step>
             <Stepper.Completed>
-              Completed, click back button to get to previous step
+              <Stack className="layout">
+                Completed, click back button to get to previous step
+              </Stack>
             </Stepper.Completed>
           </Stepper>
         </form>
