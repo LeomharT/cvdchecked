@@ -162,16 +162,18 @@ const useStyles = createStyles({
     ".mantine-Input-input": {
       height: 40,
     },
-    ".mantine-InputWrapper-required": {
-      fontSize: variable.fontSizeLarge,
-      position: "relative",
-      top: 2,
-      "& + svg": {
+    ".mantine-InputWrapper-label": {
+      "& svg": {
         marginLeft: variable.spacer1,
         opacity: "0.6",
         position: "relative",
         top: 1,
       },
+    },
+    ".mantine-InputWrapper-required": {
+      fontSize: variable.fontSizeLarge,
+      position: "relative",
+      top: 2,
     },
     ".mantine-Group-root": {
       paddingTop: 0,
@@ -419,7 +421,7 @@ export default function Calculator() {
                   </div>
                 </div>
 
-                <div className="horizontal show">
+                <div className="horizontal">
                   <Label
                     labelName="Age"
                     labelRequired="*"
@@ -540,8 +542,8 @@ export default function Calculator() {
                         <path
                           d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
                           fill="currentColor"
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                         ></path>
                       </svg>
                     </div>
@@ -561,8 +563,8 @@ export default function Calculator() {
                       withAsterisk
                       size="md"
                     >
-                      <Radio value="No" label="No" />
-                      <Radio value="Yes" label="Yes" />
+                      <Radio value="no" label="No" />
+                      <Radio value="yes" label="Yes" />
                     </Radio.Group>
                   </div>
                 </div>
