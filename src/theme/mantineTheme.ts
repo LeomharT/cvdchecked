@@ -116,11 +116,6 @@ const mantineTheme: MantineThemeOverride = {
         '.mantine-InputWrapper-root': {
           marginTop: 0,
         },
-        "&.show": {
-          "& .targetInfo": {
-            display: "inline-block",
-          }
-        }
       }
     }
   })
