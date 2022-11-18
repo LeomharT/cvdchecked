@@ -421,7 +421,7 @@ export default function Calculator() {
                   </div>
                 </div>
 
-                <div className="horizontal">
+                <div className="horizontal show">
                   <Label
                     labelName="Age"
                     labelRequired="*"
