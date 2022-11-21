@@ -21,7 +21,8 @@ import {
   Stack,
 } from "@mantine/core";
 import { useState } from "react";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
+import schema from '../utility/schema';
 
 export interface IComponentClassNames {
   content: string;
@@ -162,18 +163,16 @@ const useStyles = createStyles({
     ".mantine-Input-input": {
       height: 40,
     },
-    ".mantine-InputWrapper-label": {
-      "& svg": {
+    ".mantine-InputWrapper-required": {
+      fontSize: variable.fontSizeLarge,
+      position: "relative",
+      top: 2,
+      "& + svg": {
         marginLeft: variable.spacer1,
         opacity: "0.6",
         position: "relative",
         top: 1,
       },
-    },
-    ".mantine-InputWrapper-required": {
-      fontSize: variable.fontSizeLarge,
-      position: "relative",
-      top: 2,
     },
     ".mantine-Group-root": {
       paddingTop: 0,
@@ -343,18 +342,60 @@ export default function Calculator() {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   // Form validation
-  const form = useForm<{ age: number | undefined }>({
-    initialValues: { age: undefined },
-    validate: (values) => ({
-      age:
-        values.age === undefined
-          ? "Age is required"
-          : values.age < 30 || values.age > 79
-          ? "Age must be between 30 - 79 years for a accurate risk to be assessed."
-          : null,
-    }),
+  const form = useForm<{
+      cdhr: string | undefined,
+      age: number | undefined,
+      sex: string | undefined,
+      smoking: string | undefined,
+      bp: number | undefined,
+      cholesterol: number | undefined,
+      cho_total: number | undefined,
+      cho_short: number | undefined,
+      cvd_medicine: string | undefined,
+      ecg_history: string | undefined,
+      seifa: string | undefined,
+      diabetes: string | undefined,
+      year: string | undefined,
+      HbA1c: number | undefined,
+      uACR: number | undefined,
+      eGFR: number | undefined,
+      Weight: number | undefined,
+      Height: number | undefined,
+      insulin: string | undefined,
+    }>({
+    initialValues: { 
+      cdhr: undefined,
+      age: undefined,
+      sex: undefined,
+      smoking: undefined,
+      bp: undefined,
+      cholesterol: undefined,
+      cho_total: undefined,
+      cho_short: undefined,
+      cvd_medicine: undefined,
+      ecg_history: undefined,
+      seifa: undefined,
+      diabetes: undefined,
+      year: undefined,
+      HbA1c: undefined,
+      uACR: undefined,
+      eGFR: undefined,
+      Weight: undefined,
+      Height: undefined,
+      insulin: undefined,
+    },
+    validate: zodResolver(schema),
     validateInputOnBlur: true,
   });
+
+
+  const handleSubmit = () =>  {
+    if(!form.isValid()) {
+      alert('There are errors in the form, please correct them before continue to next part.');
+    }else {
+      nextStep();
+    }
+  } 
 
   //   Slider
   const marks = [
@@ -371,9 +412,10 @@ export default function Calculator() {
   return (
     <MantineProvider>
       <Stack className={content}>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        
           <Stepper active={active} onStepClick={setActive} breakpoint="sm">
             <Stepper.Step label="Enter risk calculation" description="">
+            <form onSubmit={form.onSubmit((values) => console.log(form.isValid()))}>
               <Stack className="layout">
                 <div className={recommendList}>
                   <Text>Assessment recommended for:</Text>
@@ -404,6 +446,7 @@ export default function Calculator() {
                       description=""
                       orientation="vertical"
                       withAsterisk
+                      {...form.getInputProps('cdhr')}
                     >
                       <Checkbox
                         value="moderate-severe chronic kidney disease"
@@ -420,7 +463,6 @@ export default function Calculator() {
                     </Checkbox.Group>
                   </div>
                 </div>
-
                 <div className="horizontal show">
                   <Label
                     labelName="Age"
@@ -450,6 +492,7 @@ export default function Calculator() {
                       description=""
                       withAsterisk
                       size="md"
+                      {...form.getInputProps('sex')}
                     >
                       <Radio value="Female" label="Female" />
                       <Radio value="Male" label="Male" />
@@ -467,6 +510,7 @@ export default function Calculator() {
                       withAsterisk
                       size="md"
                       orientation="vertical"
+                      {...form.getInputProps('smoking')}
                     >
                       <Radio value="Never smoked" label="Never smoked" />
                       <Radio
@@ -484,7 +528,7 @@ export default function Calculator() {
                 <div className="horizontal">
                   <Label labelName="Blood pressure" labelRequired="*"></Label>
                   <div className="horizontal-right">
-                    <TextInput
+                    <NumberInput
                       id="bloodPressure"
                       withAsterisk
                       label=""
@@ -493,6 +537,7 @@ export default function Calculator() {
                       rightSection="mmHg"
                       radius="md"
                       rightSectionWidth={85}
+                      {...form.getInputProps("bp")}
                     />
                   </div>
                 </div>
@@ -503,14 +548,15 @@ export default function Calculator() {
                     labelRequired="*"
                   ></Label>
                   <div className="horizontal-right">
-                    <TextInput
+                    <NumberInput
                       id="cholesterol"
                       withAsterisk
                       placeholder="Ratio of total cholesterol to HDL cholesterol"
                       description=""
                       radius="md"
+                      {...form.getInputProps("cholesterol")}
                     />
-                    <TextInput
+                    <NumberInput
                       className="short-input-total"
                       id="cholesterolTotal"
                       label=""
@@ -519,8 +565,9 @@ export default function Calculator() {
                       rightSection="mmol/L"
                       radius="md"
                       rightSectionWidth={92}
+                      {...form.getInputProps("cho_total")}
                     />
-                    <TextInput
+                    <NumberInput
                       className="short-input-high-density"
                       label=""
                       placeholder="high-density"
@@ -528,6 +575,7 @@ export default function Calculator() {
                       rightSection="mmol/L"
                       radius="md"
                       rightSectionWidth={92}
+                      {...form.getInputProps("cho_short")}
                     />
                     <div className="accordion">
                       Hide total & high-density lipoprotein values fields
@@ -542,8 +590,8 @@ export default function Calculator() {
                         <path
                           d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
                           fill="currentColor"
-                          fillRule="evenodd"
-                          clipRule="evenodd"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
                         ></path>
                       </svg>
                     </div>
@@ -562,9 +610,10 @@ export default function Calculator() {
                       description=""
                       withAsterisk
                       size="md"
+                      {...form.getInputProps("cvd_medicine")}
                     >
-                      <Radio value="no" label="No" />
-                      <Radio value="yes" label="Yes" />
+                      <Radio value="No" label="No" />
+                      <Radio value="Yes" label="Yes" />
                     </Radio.Group>
                   </div>
                 </div>
@@ -578,6 +627,7 @@ export default function Calculator() {
                     <Radio.Group
                       name="Known history of electrocardiogram (ECG) confirmed atrial fibrillation"
                       size="md"
+                      {...form.getInputProps("ecg_history")}
                     >
                       <Radio value="No" label="No" />
                       <Radio value="Yes" label="Yes" />
@@ -596,6 +646,7 @@ export default function Calculator() {
                       label=""
                       placeholder="Enter in postcode to generate SEIFA Rank"
                       radius="md"
+                      {...form.getInputProps("seifa")}
                     />
                     <div className="SEIFA-rank">
                       <div className="SEIFA-rank-title">
@@ -633,6 +684,7 @@ export default function Calculator() {
                       description=""
                       withAsterisk
                       size="md"
+                      {...form.getInputProps("diabetes")}
                     >
                       <Radio value="No" label="No" />
                       <Radio value="Yes" label="Yes" />
@@ -668,6 +720,7 @@ export default function Calculator() {
                           radius="md"
                           withAsterisk
                           rightSectionWidth={60}
+                          {...form.getInputProps("year")}
                         />
                       </div>
                     </div>
@@ -679,22 +732,24 @@ export default function Calculator() {
                         labelDescription="Enter single non-fasting HbA1c in mmol/mol or %."
                       ></Label>
                       <div className="horizontal-right or-type">
-                        <TextInput
+                        <NumberInput
                           className="or-type-left"
                           placeholder="Enter value"
                           rightSection="mmol/mol"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={96}
+                          {...form.getInputProps("HbA1c")}
                         />
                         <span>or</span>
-                        <TextInput
+                        <NumberInput
                           className="or-type-right"
                           placeholder="Enter value"
                           rightSection="%"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={35}
+                          
                         />
                       </div>
                     </div>
@@ -702,13 +757,14 @@ export default function Calculator() {
                     <div className="horizontal">
                       <Label labelName="uACR" labelRequired="*"></Label>
                       <div className="horizontal-right">
-                        <TextInput
+                        <NumberInput
                           id="uACR"
                           placeholder="Enter value"
                           rightSection="mg/mmol"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={92}
+                          {...form.getInputProps("uACR")}
                         />
                       </div>
                     </div>
@@ -720,7 +776,7 @@ export default function Calculator() {
                         labelDescription="Enter eGFR in mL/min/1.73 m2 or select if eGFR>=90"
                       ></Label>
                       <div className="horizontal-right or-type">
-                        <TextInput
+                        <NumberInput
                           className="or-type-left or-type-flex-2"
                           id="eGFR"
                           placeholder="Enter value"
@@ -728,6 +784,7 @@ export default function Calculator() {
                           radius="md"
                           withAsterisk
                           rightSectionWidth={140}
+                          {...form.getInputProps("eGFR")}
                         />
                         <span>or</span>
                         <Chip
@@ -748,21 +805,23 @@ export default function Calculator() {
                         labelDescription="Calculate BMI: kg/m2."
                       ></Label>
                       <div className="horizontal-right and-type">
-                        <TextInput
+                        <NumberInput
                           id="bmiWeight"
                           placeholder="Weight"
                           rightSection="kg"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={40}
+                          {...form.getInputProps("Weight")}
                         />
-                        <TextInput
+                        <NumberInput
                           id="bmiHeight"
                           placeholder="Height"
                           rightSection="meters"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={70}
+                          {...form.getInputProps("Height")}
                         />
                       </div>
                     </div>
@@ -778,6 +837,7 @@ export default function Calculator() {
                           description=""
                           withAsterisk
                           size="md"
+                          {...form.getInputProps("insulin")}
                         >
                           <Radio value="No" label="No" />
                           <Radio value="Yes" label="Yes" />
@@ -787,40 +847,71 @@ export default function Calculator() {
                   </div>
                 </Stack>
               </div>
+              <Stack className="layout">
+                <Group position="center" mt="xl">
+                  <Button
+                    variant="default"
+                    onClick={prevStep}
+                    className="buttom-button"
+                  >
+                    Back
+                  </Button>
+                  <Button type="submit" onClick={handleSubmit} className="buttom-button">
+                    Continue
+                  </Button>
+                  
+                </Group>
+              </Stack>
+              </form>
             </Stepper.Step>
             <Stepper.Step
               label="Consider reclassification factors"
               description=""
             >
               <Stack className="layout">Step 2 form</Stack>
+              <Stack className="layout">
+                <Group position="center" mt="xl">
+                  <Button
+                    variant="default"
+                    onClick={prevStep}
+                    className="buttom-button"
+                  >
+                    Back
+                  </Button>
+                  <Button type="submit" onClick={nextStep} className="buttom-button">
+                    Continue
+                  </Button>
+                </Group>
+              </Stack>
+              
             </Stepper.Step>
             <Stepper.Step
               label="Discuss risk result & management"
               description=""
             >
               <Stack className="layout">Step 3 form</Stack>
+              <Stack className="layout">
+                <Group position="center" mt="xl">
+                  <Button
+                    variant="default"
+                    onClick={prevStep}
+                    className="buttom-button"
+                  >
+                    Back
+                  </Button>
+                  <Button type="submit" className="buttom-button">
+                    Calculate estimated risk
+                  </Button>
+                </Group>
+              </Stack>
             </Stepper.Step>
             <Stepper.Completed>
               <Stack className="layout">
                 Completed, click back button to get to previous step
               </Stack>
+              
             </Stepper.Completed>
-          </Stepper>
-        </form>
-        <Stack className="layout">
-          <Group position="center" mt="xl">
-            <Button
-              variant="default"
-              onClick={prevStep}
-              className="buttom-button"
-            >
-              Back
-            </Button>
-            <Button onClick={nextStep} className="buttom-button">
-              Calculate estimated risk
-            </Button>
-          </Group>
-        </Stack>
+          </Stepper> 
       </Stack>
     </MantineProvider>
   );
