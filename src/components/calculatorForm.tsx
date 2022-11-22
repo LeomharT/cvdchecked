@@ -22,7 +22,7 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
-import schema from '../utility/schema';
+import schema from "../utility/schema";
 
 export interface IComponentClassNames {
   content: string;
@@ -50,15 +50,15 @@ const useStyles = createStyles({
       color: "#79909C",
       letterSpacing: "0.15px",
       fontSize: variable.fontSizeBase,
-      opacity: 1 /* Firefox */,
+      opacity: 1,
     },
     "input:-ms-input-placeholder": {
-      /* Internet Explorer 10-11 */ color: "#79909C",
+      color: "#79909C",
       letterSpacing: "0.15px",
       fontSize: variable.fontSizeBase,
     },
     "input::-ms-input-placeholder": {
-      /* Microsoft Edge */ color: "#79909C",
+      color: "#79909C",
       letterSpacing: "0.15px",
       fontSize: variable.fontSizeBase,
     },
@@ -83,7 +83,7 @@ const useStyles = createStyles({
         paddingRight: "20px",
       },
       "& .mantine-Stepper-content": {
-        marginTop: "20px",
+        marginTop: "15px",
       },
       "& .mantine-Stepper-separator": {
         [variable.mobileUp]: {
@@ -109,15 +109,14 @@ const useStyles = createStyles({
     },
     ".horizontal": {
       borderTop: "1px solid #E0E0E0",
-      paddingTop: variable.spacer4,
-      marginTop: variable.spacer4,
+      paddingTop: variable.spacer2,
+      marginTop: variable.spacer3,
       gap: 30,
       [variable.mobileDown]: {
         gap: 15,
       },
       "& > div": {
         width: "40%",
-        marginTop: variable.spacer1,
         [variable.mobileDown]: {
           width: "100%",
         },
@@ -149,7 +148,7 @@ const useStyles = createStyles({
     },
     ".mantine-InputWrapper-description": {
       position: "relative",
-      top: 12,
+      top: 2,
       [variable.mobileDown]: {
         position: "static",
       },
@@ -182,16 +181,19 @@ const useStyles = createStyles({
       marginTop: variable.spacer1,
     },
     ".mantine-CheckboxGroup-root > div": {
-      gap: 16,
-    },
-    ".mantine-Stack-root": {
-      gap: 8,
+      gap: variable.spacer2,
     },
     ".mantine-InputWrapper-root > div": {
       padding: 0,
     },
+    ".mantine-RadioGroup-root": {
+      ".mantine-Stack-root": {
+        gap: variable.spacer0,
+      },
+    },
     ".short-input-total": {
       display: "inline-block",
+      verticalAlign: "top",
       width: "50%",
       paddingRight: variable.spacer4,
     },
@@ -327,6 +329,17 @@ const useStyles = createStyles({
     paddingTop: variable.spacer5,
     paddingBottom: variable.spacer5,
     marginTop: variable.spacer5,
+    "& .diabetes-equation-text": {
+      fontSize: variable.fontSizeBase,
+      color: "#546E7A",
+      letterSpacing: " 0.25px",
+      lineHeight: "20px",
+    },
+    "& .diabetes-equation-title": {
+      fontWeight: 500,
+      letterSpacing: "0.15px",
+      lineHeight: "20px",
+    },
   },
   recommendList: {},
 });
@@ -343,27 +356,27 @@ export default function Calculator() {
 
   // Form validation
   const form = useForm<{
-      cdhr: string | undefined,
-      age: number | undefined,
-      sex: string | undefined,
-      smoking: string | undefined,
-      bp: number | undefined,
-      cholesterol: number | undefined,
-      cho_total: number | undefined,
-      cho_short: number | undefined,
-      cvd_medicine: string | undefined,
-      ecg_history: string | undefined,
-      seifa: string | undefined,
-      diabetes: string | undefined,
-      year: string | undefined,
-      HbA1c: number | undefined,
-      uACR: number | undefined,
-      eGFR: number | undefined,
-      Weight: number | undefined,
-      Height: number | undefined,
-      insulin: string | undefined,
-    }>({
-    initialValues: { 
+    cdhr: string | undefined;
+    age: number | undefined;
+    sex: string | undefined;
+    smoking: string | undefined;
+    bp: number | undefined;
+    cholesterol: number | undefined;
+    cho_total: number | undefined;
+    cho_short: number | undefined;
+    cvd_medicine: string | undefined;
+    ecg_history: string | undefined;
+    seifa: string | undefined;
+    diabetes: string | undefined;
+    year: string | undefined;
+    HbA1c: number | undefined;
+    uACR: number | undefined;
+    eGFR: number | undefined;
+    Weight: number | undefined;
+    Height: number | undefined;
+    insulin: string | undefined;
+  }>({
+    initialValues: {
       cdhr: undefined,
       age: undefined,
       sex: undefined,
@@ -388,14 +401,15 @@ export default function Calculator() {
     validateInputOnBlur: true,
   });
 
-
-  const handleSubmit = () =>  {
-    if(!form.isValid()) {
-      alert('There are errors in the form, please correct them before continue to next part.');
-    }else {
+  const handleSubmit = () => {
+    if (!form.isValid()) {
+      alert(
+        "There are errors in the form, please correct them before continue to next part."
+      );
+    } else {
       nextStep();
     }
-  } 
+  };
 
   //   Slider
   const marks = [
@@ -412,25 +426,27 @@ export default function Calculator() {
   return (
     <MantineProvider>
       <Stack className={content}>
-        
-          <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-            <Stepper.Step label="Enter risk calculation" description="">
-            <form onSubmit={form.onSubmit((values) => console.log(form.isValid()))}>
+        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+          <Stepper.Step label="Enter risk calculation" description="">
+            <form
+              onSubmit={form.onSubmit((values) => console.log(form.isValid()))}
+            >
               <Stack className="layout">
                 <div className={recommendList}>
-                  <Text>Assessment recommended for:</Text>
+                  <Text>
+                    Assessment recommended for the following individuals without
+                    known CVD :
+                  </Text>
                   <List withPadding>
+                    <List.Item>Men and women aged 45-79 years.</List.Item>
                     <List.Item>
-                      Men and women aged 45-79 years without known CVD.
+                      People diagnosed with diabetes from age 35 or time of
+                      diagnosis whichever is the latest.
                     </List.Item>
                     <List.Item>
-                      People diagnosed with diabetes (without known CVD) from
-                      age 35 or time of diagnosis whichever is the latest.
-                    </List.Item>
-                    <List.Item>
-                      For Aboriginal and/or Torres Strait Islander Peoples
-                      without known CVD assess CVD risk in men and women aged
-                      30-79 years using a risk calculator.
+                      For Aboriginal and or Torres Strait Islander Peoples
+                      assess CVD risk in men and women aged 30-79 years using a
+                      risk calculator.
                     </List.Item>
                   </List>
                 </div>
@@ -446,7 +462,7 @@ export default function Calculator() {
                       description=""
                       orientation="vertical"
                       withAsterisk
-                      {...form.getInputProps('cdhr')}
+                      {...form.getInputProps("cdhr")}
                     >
                       <Checkbox
                         value="moderate-severe chronic kidney disease"
@@ -463,7 +479,7 @@ export default function Calculator() {
                     </Checkbox.Group>
                   </div>
                 </div>
-                <div className="horizontal show">
+                <div className="horizontal">
                   <Label
                     labelName="Age"
                     labelRequired="*"
@@ -492,7 +508,7 @@ export default function Calculator() {
                       description=""
                       withAsterisk
                       size="md"
-                      {...form.getInputProps('sex')}
+                      {...form.getInputProps("sex")}
                     >
                       <Radio value="Female" label="Female" />
                       <Radio value="Male" label="Male" />
@@ -510,7 +526,7 @@ export default function Calculator() {
                       withAsterisk
                       size="md"
                       orientation="vertical"
-                      {...form.getInputProps('smoking')}
+                      {...form.getInputProps("smoking")}
                     >
                       <Radio value="Never smoked" label="Never smoked" />
                       <Radio
@@ -695,17 +711,18 @@ export default function Calculator() {
               <div className={diabetesOpen}>
                 <Stack className="layout">
                   <div className="gray-background-wrapper">
-                    <Checkbox.Group>
-                      <Checkbox label="Use diabetes specfic equation" />
-                      <span>
-                        The diabetes specific equation provides a more accurate
-                        CVD risk estimate for people with type 2 diabetes. It
-                        requires the following variables: time since diagnosis
-                        of diabetes, HbA1c, eGFR, uACR, BMI and use of insulin.
-                        Warning that this may underestimate risk in type 1
-                        diabetes.
-                      </span>
-                    </Checkbox.Group>
+                    <Checkbox
+                      label="Use diabetes specfic equation"
+                      className="diabetes-equation-title"
+                    />
+                    <span className="diabetes-equation-text">
+                      The diabetes specific equation provides a more accurate
+                      CVD risk estimate for people with type 2 diabetes. It
+                      requires the following variables: time since diagnosis of
+                      diabetes, HbA1c, eGFR, uACR, BMI and use of insulin.
+                      Warning that this may underestimate risk in type 1
+                      diabetes.
+                    </span>
 
                     <div className="horizontal">
                       <Label
@@ -729,7 +746,6 @@ export default function Calculator() {
                       <Label
                         labelName="Glycated haemoglobin (HbA1c)"
                         labelRequired="*"
-                        labelDescription="Enter single non-fasting HbA1c in mmol/mol or %."
                       ></Label>
                       <div className="horizontal-right or-type">
                         <NumberInput
@@ -749,7 +765,6 @@ export default function Calculator() {
                           radius="md"
                           withAsterisk
                           rightSectionWidth={35}
-                          
                         />
                       </div>
                     </div>
@@ -770,11 +785,7 @@ export default function Calculator() {
                     </div>
 
                     <div className="horizontal">
-                      <Label
-                        labelName="eGFR"
-                        labelRequired="*"
-                        labelDescription="Enter eGFR in mL/min/1.73 m2 or select if eGFR>=90"
-                      ></Label>
+                      <Label labelName="eGFR" labelRequired="*"></Label>
                       <div className="horizontal-right or-type">
                         <NumberInput
                           className="or-type-left or-type-flex-2"
@@ -802,13 +813,12 @@ export default function Calculator() {
                       <Label
                         labelName="Body mass index (BMI)"
                         labelRequired="*"
-                        labelDescription="Calculate BMI: kg/m2."
                       ></Label>
                       <div className="horizontal-right and-type">
                         <NumberInput
                           id="bmiWeight"
                           placeholder="Weight"
-                          rightSection="kg"
+                          rightSection="Kg"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={40}
@@ -817,7 +827,7 @@ export default function Calculator() {
                         <NumberInput
                           id="bmiHeight"
                           placeholder="Height"
-                          rightSection="meters"
+                          rightSection="Meters"
                           radius="md"
                           withAsterisk
                           rightSectionWidth={70}
@@ -856,62 +866,64 @@ export default function Calculator() {
                   >
                     Back
                   </Button>
-                  <Button type="submit" onClick={handleSubmit} className="buttom-button">
-                    Continue
-                  </Button>
-                  
-                </Group>
-              </Stack>
-              </form>
-            </Stepper.Step>
-            <Stepper.Step
-              label="Consider reclassification factors"
-              description=""
-            >
-              <Stack className="layout">Step 2 form</Stack>
-              <Stack className="layout">
-                <Group position="center" mt="xl">
                   <Button
-                    variant="default"
-                    onClick={prevStep}
+                    type="submit"
+                    onClick={handleSubmit}
                     className="buttom-button"
                   >
-                    Back
-                  </Button>
-                  <Button type="submit" onClick={nextStep} className="buttom-button">
                     Continue
                   </Button>
                 </Group>
               </Stack>
-              
-            </Stepper.Step>
-            <Stepper.Step
-              label="Discuss risk result & management"
-              description=""
-            >
-              <Stack className="layout">Step 3 form</Stack>
-              <Stack className="layout">
-                <Group position="center" mt="xl">
-                  <Button
-                    variant="default"
-                    onClick={prevStep}
-                    className="buttom-button"
-                  >
-                    Back
-                  </Button>
-                  <Button type="submit" className="buttom-button">
-                    Calculate estimated risk
-                  </Button>
-                </Group>
-              </Stack>
-            </Stepper.Step>
-            <Stepper.Completed>
-              <Stack className="layout">
-                Completed, click back button to get to previous step
-              </Stack>
-              
-            </Stepper.Completed>
-          </Stepper> 
+            </form>
+          </Stepper.Step>
+          <Stepper.Step
+            label="Consider reclassification factors"
+            description=""
+          >
+            <Stack className="layout">Step 2 form</Stack>
+            <Stack className="layout">
+              <Group position="center" mt="xl">
+                <Button
+                  variant="default"
+                  onClick={prevStep}
+                  className="buttom-button"
+                >
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={nextStep}
+                  className="buttom-button"
+                >
+                  Continue
+                </Button>
+              </Group>
+            </Stack>
+          </Stepper.Step>
+          <Stepper.Step label="Discuss risk result & management" description="">
+            <Stack className="layout">Step 3 form</Stack>
+            <Stack className="layout">
+              <Group position="center" mt="xl">
+                <Button
+                  variant="default"
+                  onClick={prevStep}
+                  className="buttom-button"
+                >
+                  Back
+                </Button>
+                <Button type="submit" className="buttom-button">
+                  Calculate estimated risk
+                </Button>
+              </Group>
+            </Stack>
+          </Stepper.Step>
+          <Stepper.Completed>
+            <Stack className="layout">
+              Completed, click back button to get to previous step
+            </Stack>
+          </Stepper.Completed>
+        </Stepper>
       </Stack>
     </MantineProvider>
   );
