@@ -603,6 +603,7 @@ export default function Calculator() {
                   >
                     <NumberInput
                       id="cholesterol"
+                      disabled
                       withAsterisk
                       placeholder="Ratio of total cholesterol to HDL cholesterol"
                       description=""
