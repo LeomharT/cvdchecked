@@ -99,6 +99,11 @@ const mantineTheme: MantineThemeOverride = {
           [variable.mobileDown]: {
             width: "100%",
           },
+          '& .mantine-Input-wrapper': {
+            '& .mantine-NumberInput-invalid + .mantine-Input-rightSection': {
+              color: "#fa5252",
+            }
+          },
           '&.or-type': {
             [variable.smDown]: {
               flexDirection: "column",

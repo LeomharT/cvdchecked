@@ -23,12 +23,12 @@ import {
 import { useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import schema from "../utility/schema";
+import { IconRotate } from "@tabler/icons";
 
 export interface IComponentClassNames {
   content: string;
   calculationVariables: string;
   calculationVariablesRight: string;
-  diabetesOpen: string;
   recommendList: string;
   highRisk: string;
 }
@@ -128,6 +128,23 @@ const useStyles = createStyles({
       [variable.mobileDown]: {
         width: "100%",
       },
+      "& .accordion-open": {
+        display: "block",
+      },
+      "&.active": {
+        ".short-input-wrapper": {
+          maxHeight: "100%",
+        },
+        "& .accordion-open": {
+          display: "none",
+        },
+        "& .accordion-close": {
+          display: "block",
+          "& svg": {
+            transform: "rotate(180deg)",
+          },
+        },
+      },
     },
     ".mantine-Checkbox-inner": {
       transform: "none",
@@ -193,6 +210,11 @@ const useStyles = createStyles({
         gap: variable.spacer0,
       },
     },
+    ".short-input-wrapper": {
+      maxHeight: 0,
+      overflow: "hidden",
+      transition: "max-height .2s ease",
+    },
     ".short-input-total": {
       display: "inline-block",
       verticalAlign: "top",
@@ -205,10 +227,14 @@ const useStyles = createStyles({
       paddingLeft: variable.spacer4,
     },
     ".accordion": {
-      color: "rgba(0,116,255,0.5)",
+      color: "#0074FF",
       fontSize: variable.fontSizeBase,
       letterSpacing: "0.15px",
       lineHeight: "20px",
+      cursor: "pointer",
+      "& .accordion-close": {
+        display: "none",
+      },
     },
     ".accordion-chevron-down": {
       position: "relative",
@@ -322,35 +348,36 @@ const useStyles = createStyles({
         backgroundColor: "#B0BEC5",
       },
     },
+    "& .diabetesOpen": {
+      clear: "both",
+      backgroundColor: "#F5F5F5",
+      paddingTop: variable.spacer5,
+      paddingBottom: variable.spacer5,
+      marginTop: variable.spacer5,
+      "& .diabetes-equation-text": {
+        fontSize: variable.fontSizeBase,
+        color: "#546E7A",
+        letterSpacing: " 0.25px",
+        lineHeight: "20px",
+      },
+      "& .diabetes-equation-title": {
+        fontWeight: 500,
+        letterSpacing: "0.15px",
+        lineHeight: "20px",
+      },
+    },
   },
   calculationVariables: {},
   calculationVariablesRight: {},
-  diabetesOpen: {
-    clear: "both",
-    backgroundColor: "#F5F5F5",
-    paddingTop: variable.spacer5,
-    paddingBottom: variable.spacer5,
-    marginTop: variable.spacer5,
-    "& .diabetes-equation-text": {
-      fontSize: variable.fontSizeBase,
-      color: "#546E7A",
-      letterSpacing: " 0.25px",
-      lineHeight: "20px",
-    },
-    "& .diabetes-equation-title": {
-      fontWeight: 500,
-      letterSpacing: "0.15px",
-      lineHeight: "20px",
-    },
-  },
   recommendList: {},
 });
 
 export default function Calculator() {
-  let { content, diabetesOpen, recommendList } = useStyles().classes;
+  let { content, recommendList } = useStyles().classes;
 
   // Stepper
   const [active, setActive] = useState(0);
+
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () =>
@@ -411,6 +438,22 @@ export default function Calculator() {
     } else {
       nextStep();
     }
+  };
+
+  // diabetes status
+  const [diabetes, SetDiabetes] = useState(false);
+
+  const onChangeNo = () => {
+    SetDiabetes(false);
+  };
+  const onChangeYes = () => {
+    SetDiabetes(true);
+  };
+
+  // Accordion
+  const [isActive, setIsActive] = useState(false);
+  const hanleAccordionClick = () => {
+    setIsActive(!isActive);
   };
 
   //   Slider
@@ -565,7 +608,9 @@ export default function Calculator() {
                     labelName="Ratio of total cholesterol to HDL cholesterol"
                     labelRequired="*"
                   ></Label>
-                  <div className="horizontal-right">
+                  <div
+                    className={`horizontal-right ${isActive ? "active" : ""}`}
+                  >
                     <NumberInput
                       id="cholesterol"
                       withAsterisk
@@ -574,44 +619,68 @@ export default function Calculator() {
                       radius="md"
                       {...form.getInputProps("cholesterol")}
                     />
-                    <NumberInput
-                      className="short-input-total"
-                      id="cholesterolTotal"
-                      label=""
-                      placeholder="Total"
-                      description=""
-                      rightSection="mmol/L"
-                      radius="md"
-                      rightSectionWidth={92}
-                      {...form.getInputProps("cho_total")}
-                    />
-                    <NumberInput
-                      className="short-input-high-density"
-                      label=""
-                      placeholder="high-density"
-                      description=""
-                      rightSection="mmol/L"
-                      radius="md"
-                      rightSectionWidth={92}
-                      {...form.getInputProps("cho_short")}
-                    />
-                    <div className="accordion">
-                      Hide total & high-density lipoprotein values fields
-                      <svg
-                        className="accordion-chevron-down"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                      >
-                        <path
-                          d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
-                          fill="currentColor"
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                        ></path>
-                      </svg>
+                    <div className="short-input-wrapper">
+                      <NumberInput
+                        className="short-input-total"
+                        id="cholesterolTotal"
+                        label=""
+                        placeholder="Total"
+                        description=""
+                        rightSection="mmol/L"
+                        radius="md"
+                        rightSectionWidth={92}
+                        {...form.getInputProps("cho_total")}
+                      />
+                      <NumberInput
+                        className="short-input-high-density"
+                        label=""
+                        placeholder="high-density"
+                        description=""
+                        rightSection="mmol/L"
+                        radius="md"
+                        rightSectionWidth={92}
+                        {...form.getInputProps("cho_short")}
+                      />
+                    </div>
+
+                    <div className="accordion" onClick={hanleAccordionClick}>
+                      <div className="accordion-open">
+                        or enter total cholesterol and HDL cholesterol
+                        separately
+                        <svg
+                          className="accordion-chevron-down"
+                          viewBox="0 0 15 15"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                        >
+                          <path
+                            d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
+                            fill="currentColor"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div className="accordion-close">
+                        Hide total & high-density lipoprotein values fields
+                        <svg
+                          className="accordion-chevron-down"
+                          viewBox="0 0 15 15"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                        >
+                          <path
+                            d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
+                            fill="currentColor"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -704,170 +773,166 @@ export default function Calculator() {
                       size="md"
                       {...form.getInputProps("diabetes")}
                     >
-                      <Radio value="No" label="No" />
-                      <Radio value="Yes" label="Yes" />
+                      <Radio value="1" label="No" onClick={onChangeNo} />
+                      <Radio value="2" label="Yes" onClick={onChangeYes} />
                     </Radio.Group>
                   </div>
                 </div>
               </Stack>
-              <div className={diabetesOpen}>
-                <Stack className="layout">
-                  <div className="gray-background-wrapper">
-                    <Checkbox
-                      label="Use diabetes specfic equation"
-                      className="diabetes-equation-title"
-                    />
-                    <span className="diabetes-equation-text">
-                      The diabetes specific equation provides a more accurate
-                      CVD risk estimate for people with type 2 diabetes. It
-                      requires the following variables: time since diagnosis of
-                      diabetes, HbA1c, eGFR, uACR, BMI and use of insulin.
-                      Warning that this may underestimate risk in type 1
-                      diabetes.
-                    </span>
+              {diabetes && (
+                <div className="diabetesOpen">
+                  <Stack className="layout">
+                    <div className="gray-background-wrapper">
+                      <Checkbox
+                        label="Use diabetes specfic equation"
+                        className="diabetes-equation-title"
+                      />
+                      <span className="diabetes-equation-text">
+                        The diabetes specific equation provides a more accurate
+                        CVD risk estimate for people with type 2 diabetes. It
+                        requires the following variables: time since diagnosis
+                        of diabetes, HbA1c, eGFR, uACR, BMI and use of insulin.
+                        Warning that this may underestimate risk in type 1
+                        diabetes.
+                      </span>
 
-                    <div className="horizontal">
-                      <Label
-                        labelName="Years since diabetes diagnosis"
-                        labelRequired="*"
-                      ></Label>
-                      <div className="horizontal-right">
-                        <TextInput
-                          label=""
-                          placeholder="Enter value"
-                          rightSection="Years"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={60}
-                          {...form.getInputProps("year")}
-                        />
+                      <div className="horizontal">
+                        <Label
+                          labelName="Years since diabetes diagnosis"
+                          labelRequired="*"
+                        ></Label>
+                        <div className="horizontal-right">
+                          <TextInput
+                            label=""
+                            placeholder="Enter value"
+                            rightSection="Years"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={60}
+                            {...form.getInputProps("year")}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="horizontal">
+                        <Label
+                          labelName="Glycated haemoglobin (HbA1c)"
+                          labelRequired="*"
+                        ></Label>
+                        <div className="horizontal-right or-type">
+                          <NumberInput
+                            className="or-type-left"
+                            placeholder="Enter value"
+                            rightSection="mmol/mol"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={96}
+                            {...form.getInputProps("HbA1c")}
+                          />
+                          <span>or</span>
+                          <NumberInput
+                            className="or-type-right"
+                            placeholder="Enter value"
+                            rightSection="%"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={35}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="horizontal">
+                        <Label labelName="uACR" labelRequired="*"></Label>
+                        <div className="horizontal-right">
+                          <NumberInput
+                            id="uACR"
+                            placeholder="Enter value"
+                            rightSection="mg/mmol"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={92}
+                            {...form.getInputProps("uACR")}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="horizontal">
+                        <Label labelName="eGFR" labelRequired="*"></Label>
+                        <div className="horizontal-right or-type">
+                          <NumberInput
+                            className="or-type-left or-type-flex-2"
+                            id="eGFR"
+                            placeholder="Enter value"
+                            rightSection="mL/min/1.73 m2"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={140}
+                            {...form.getInputProps("eGFR")}
+                          />
+                          <span>or</span>
+                          <Chip
+                            size="lg"
+                            radius="md"
+                            id="eGFRChip"
+                            className="chip or-type-right"
+                          >
+                            eGFR&gt;=90
+                          </Chip>
+                        </div>
+                      </div>
+
+                      <div className="horizontal">
+                        <Label
+                          labelName="Body mass index (BMI)"
+                          labelRequired="*"
+                        ></Label>
+                        <div className="horizontal-right and-type">
+                          <NumberInput
+                            id="bmiWeight"
+                            placeholder="Weight"
+                            rightSection="Kg"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={40}
+                            {...form.getInputProps("Weight")}
+                          />
+                          <NumberInput
+                            id="bmiHeight"
+                            placeholder="Height"
+                            rightSection="Meters"
+                            radius="md"
+                            withAsterisk
+                            rightSectionWidth={70}
+                            {...form.getInputProps("Height")}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="horizontal">
+                        <Label
+                          labelName="Use of Insulin within last 6 months"
+                          labelRequired="*"
+                        ></Label>
+                        <div className="horizontal-right">
+                          <Radio.Group
+                            name="Use of Insulin within last 6 months"
+                            description=""
+                            withAsterisk
+                            size="md"
+                            {...form.getInputProps("insulin")}
+                          >
+                            <Radio value="No" label="No" />
+                            <Radio value="Yes" label="Yes" />
+                          </Radio.Group>
+                        </div>
                       </div>
                     </div>
+                  </Stack>
+                </div>
+              )}
 
-                    <div className="horizontal">
-                      <Label
-                        labelName="Glycated haemoglobin (HbA1c)"
-                        labelRequired="*"
-                      ></Label>
-                      <div className="horizontal-right or-type">
-                        <NumberInput
-                          className="or-type-left"
-                          placeholder="Enter value"
-                          rightSection="mmol/mol"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={96}
-                          {...form.getInputProps("HbA1c")}
-                        />
-                        <span>or</span>
-                        <NumberInput
-                          className="or-type-right"
-                          placeholder="Enter value"
-                          rightSection="%"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={35}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="horizontal">
-                      <Label labelName="uACR" labelRequired="*"></Label>
-                      <div className="horizontal-right">
-                        <NumberInput
-                          id="uACR"
-                          placeholder="Enter value"
-                          rightSection="mg/mmol"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={92}
-                          {...form.getInputProps("uACR")}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="horizontal">
-                      <Label labelName="eGFR" labelRequired="*"></Label>
-                      <div className="horizontal-right or-type">
-                        <NumberInput
-                          className="or-type-left or-type-flex-2"
-                          id="eGFR"
-                          placeholder="Enter value"
-                          rightSection="mL/min/1.73 m2"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={140}
-                          {...form.getInputProps("eGFR")}
-                        />
-                        <span>or</span>
-                        <Chip
-                          size="lg"
-                          radius="md"
-                          id="eGFRChip"
-                          className="chip or-type-right"
-                        >
-                          eGFR&gt;=90
-                        </Chip>
-                      </div>
-                    </div>
-
-                    <div className="horizontal">
-                      <Label
-                        labelName="Body mass index (BMI)"
-                        labelRequired="*"
-                      ></Label>
-                      <div className="horizontal-right and-type">
-                        <NumberInput
-                          id="bmiWeight"
-                          placeholder="Weight"
-                          rightSection="Kg"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={40}
-                          {...form.getInputProps("Weight")}
-                        />
-                        <NumberInput
-                          id="bmiHeight"
-                          placeholder="Height"
-                          rightSection="Meters"
-                          radius="md"
-                          withAsterisk
-                          rightSectionWidth={70}
-                          {...form.getInputProps("Height")}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="horizontal">
-                      <Label
-                        labelName="Use of Insulin within last 6 months"
-                        labelRequired="*"
-                      ></Label>
-                      <div className="horizontal-right">
-                        <Radio.Group
-                          name="Use of Insulin within last 6 months"
-                          description=""
-                          withAsterisk
-                          size="md"
-                          {...form.getInputProps("insulin")}
-                        >
-                          <Radio value="No" label="No" />
-                          <Radio value="Yes" label="Yes" />
-                        </Radio.Group>
-                      </div>
-                    </div>
-                  </div>
-                </Stack>
-              </div>
               <Stack className="layout">
                 <Group position="center" mt="xl">
-                  <Button
-                    variant="default"
-                    onClick={prevStep}
-                    className="buttom-button"
-                  >
-                    Back
-                  </Button>
                   <Button
                     type="submit"
                     onClick={handleSubmit}
