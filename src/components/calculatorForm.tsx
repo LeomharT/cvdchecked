@@ -355,7 +355,9 @@ const useStyles = createStyles({
       paddingBottom: variable.spacer5,
       marginTop: variable.spacer5,
       "& .diabetes-equation-text": {
-        fontSize: variable.fontSizeBase,
+        display: "block",
+        marginTop: variable.spacer4,
+        fontSize: variable.fontSizeSmall,
         color: "#546E7A",
         letterSpacing: " 0.25px",
         lineHeight: "20px",
@@ -385,7 +387,6 @@ export default function Calculator() {
 
   // Form validation
   const form = useForm<{
-    cdhr: string | undefined;
     age: number | undefined;
     sex: string | undefined;
     smoking: string | undefined;
@@ -394,8 +395,6 @@ export default function Calculator() {
     cho_total: number | undefined;
     cho_short: number | undefined;
     cvd_medicine: string | undefined;
-    ecg_history: string | undefined;
-    seifa: string | undefined;
     diabetes: string | undefined;
     year: string | undefined;
     HbA1c: number | undefined;
@@ -406,7 +405,6 @@ export default function Calculator() {
     insulin: string | undefined;
   }>({
     initialValues: {
-      cdhr: undefined,
       age: undefined,
       sex: undefined,
       smoking: undefined,
@@ -415,8 +413,6 @@ export default function Calculator() {
       cho_total: undefined,
       cho_short: undefined,
       cvd_medicine: undefined,
-      ecg_history: undefined,
-      seifa: undefined,
       diabetes: undefined,
       year: undefined,
       HbA1c: undefined,
@@ -498,7 +494,6 @@ export default function Calculator() {
                 <div className="horizontal">
                   <Label
                     labelName="Clinically determined high risk"
-                    labelRequired="*"
                     labelDescription="Clinical conditions that automatically confer high risk. If either of these apply, you will be redirected to management for high risk category"
                   ></Label>
                   <div className="horizontal-right">
@@ -507,7 +502,6 @@ export default function Calculator() {
                       description=""
                       orientation="vertical"
                       withAsterisk
-                      {...form.getInputProps("cdhr")}
                     >
                       <Checkbox
                         value="moderate-severe chronic kidney disease"
@@ -516,10 +510,6 @@ export default function Calculator() {
                       <Checkbox
                         value="familial hypercholesterolaemia"
                         label="familial hypercholesterolaemia"
-                      />
-                      <Checkbox
-                        value="Neither conditions present"
-                        label="Neither conditions present"
                       />
                     </Checkbox.Group>
                   </div>
@@ -613,6 +603,7 @@ export default function Calculator() {
                   >
                     <NumberInput
                       id="cholesterol"
+                      disabled
                       withAsterisk
                       placeholder="Ratio of total cholesterol to HDL cholesterol"
                       description=""
@@ -707,14 +698,12 @@ export default function Calculator() {
 
                 <div className="horizontal">
                   <Label
-                    labelName="Known history of electrocardiogram (ECG) confirmed atrial fibrillation"
-                    labelRequired="*"
+                    labelName="Known history of ECG confirmed atrial fibrillation"
                   ></Label>
                   <div className="horizontal-right">
                     <Radio.Group
-                      name="Known history of electrocardiogram (ECG) confirmed atrial fibrillation"
+                      name="Known history of ECG confirmed atrial fibrillation"
                       size="md"
-                      {...form.getInputProps("ecg_history")}
                     >
                       <Radio value="No" label="No" />
                       <Radio value="Yes" label="Yes" />
@@ -725,7 +714,6 @@ export default function Calculator() {
                 <div className="horizontal">
                   <Label
                     labelName="Socioeconomic status"
-                    labelRequired="*"
                   ></Label>
                   <div className="horizontal-right">
                     <TextInput
@@ -733,7 +721,6 @@ export default function Calculator() {
                       label=""
                       placeholder="Enter in postcode to generate SEIFA Rank"
                       radius="md"
-                      {...form.getInputProps("seifa")}
                     />
                     <div className="SEIFA-rank">
                       <div className="SEIFA-rank-title">
