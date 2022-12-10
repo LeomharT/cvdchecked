@@ -28,9 +28,9 @@ export const variable = {
   grey100: "#F5F5F5",
   grey200: "#EEEEEE",
   grey300: "#E0E0E0",
-  grey400: "#D8D8D8",
-  grey500: "#9E9E9E",
-  grey600: "#757575",
+  grey400: "#CFD8DB",
+  grey500: "#79909C",
+  grey600: "#546E7A",
   grey700: "#616161",
   grey800: "#3B3B3B",
   grey900: "#1E1E1E",
@@ -38,6 +38,9 @@ export const variable = {
   greyA200: "#aaaaaa",
   greyA400: "#303030",
   greyA700: "#616161",
+
+  letterSpacingXs: "0.15px",
+  letterSpacingSm: "0.25px",
 
   //header height for per page padding top value
   headerHeight: 118,
@@ -67,7 +70,7 @@ export const variable = {
 
   //font
   fontFamily: `
-    "Proxima Nova",
+    "Roboto Flex",
     "GT Walsheim",
     "-apple-system",
     "BlinkMacSystemFont",
@@ -79,7 +82,7 @@ export const variable = {
     "Apple Color Emoji",
     "Segoe UI Emoji",
     "Segoe UI Symbol",
-    "Noto Color Emoji",`,
+    "Noto Color Emoji"`,
   // fontFamily: 'Proxima Nova, -apple-system, Helvetica Neue, Arial, sans-serif',
   fontFamilyShort: "Proxima Nova",
   fontFamilyAdvanced: "PT Serif",

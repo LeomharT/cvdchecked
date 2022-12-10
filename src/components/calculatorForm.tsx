@@ -20,10 +20,11 @@ import {
   MantineProvider,
   Stack,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import schema from "../utility/schema";
 import { IconRotate } from "@tabler/icons";
+import { useRef } from "react";
 
 export interface IComponentClassNames {
   content: string;
@@ -391,7 +392,7 @@ export default function Calculator() {
     sex: string | undefined;
     smoking: string | undefined;
     bp: number | undefined;
-    cholesterol: number | undefined;
+    // cholesterol: number | undefined;
     cho_total: number | undefined;
     cho_short: number | undefined;
     cvd_medicine: string | undefined;
@@ -409,7 +410,7 @@ export default function Calculator() {
       sex: undefined,
       smoking: undefined,
       bp: undefined,
-      cholesterol: undefined,
+      // cholesterol: undefined,
       cho_total: undefined,
       cho_short: undefined,
       cvd_medicine: undefined,
@@ -463,6 +464,123 @@ export default function Calculator() {
   //   drawer
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
+
+  // Ratio of total cholesterol to HDL cholesterol
+  const [cholesterol, setCholesterol] = useState("");
+  const [total, setTotal] = useState("");
+  const [density, setDensity] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isMultiDisabled, setMultiDisabled] = useState(false);
+  const cRef = useRef<HTMLInputElement>(null);
+  const cRef1 = useRef<HTMLInputElement>(null);
+
+  const changeCholesterolDisabled = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCholesterol(event.target.value);
+    const eventValue = event.target.value;
+
+    if (eventValue.trim().length !== 0) {
+      setMultiDisabled(true);
+      if (cRef1.current != null) {
+        cRef1.current.value = "";
+      }
+    } else {
+      setMultiDisabled(false);
+    }
+  };
+
+  const changeTotalDisabled = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTotal(event.target.value);
+    const eventValue = event.target.value;
+
+    if (eventValue.trim().length !== 0) {
+      setIsDisabled(true);
+      if (cRef.current != null) {
+        cRef.current.value = "";
+      }
+    } else {
+      setIsDisabled(false);
+    }
+  };
+
+  const changeDensityDisabled = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDensity(event.target.value);
+    const eventValue = event.target.value;
+
+    if (eventValue.trim().length !== 0) {
+      setIsDisabled(true);
+      if (cRef.current != null) {
+        cRef.current.value = "";
+      }
+    } else {
+      setIsDisabled(false);
+    }
+  };
+
+  // Glycated haemoglobin (HbA1c)
+  const [hbA1c, setHbA1c] = useState("");
+  const [hbA1c1, setHbA1c1] = useState("");
+  const [isHDisabled, setIsHDisabled] = useState(false);
+  const [isHDisabled1, setIsHDisabled1] = useState(false);
+  const hRef = useRef<HTMLInputElement>(null);
+  const hRef1 = useRef<HTMLInputElement>(null);
+
+  const changeHbA1cDisabled = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHbA1c(event.target.value);
+    const eventValue = event.target.value;
+
+    if (eventValue.trim().length !== 0) {
+      setIsHDisabled(true);
+      if (hRef1.current != null) {
+        hRef1.current.value = "";
+      }
+    } else {
+      setIsHDisabled(false);
+    }
+  };
+
+  const changeHbA1cDisabled1 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHbA1c1(event.target.value);
+    const eventValue = event.target.value;
+
+    if (eventValue.trim().length !== 0) {
+      setIsHDisabled1(true);
+      if (hRef.current != null) {
+        hRef.current.value = "";
+      }
+    } else {
+      setIsHDisabled1(false);
+    }
+  };
+
+  // eGFR
+  const [eGFR, setEGFR] = useState("");
+  const [isEGFRDisabled, setIsEGFRDisabled] = useState(false);
+  const [isChipDisabled, setIsChipDisabled] = useState(false);
+  const [chipChecked, setChipChecked] = useState(false);
+
+  const changeEGFRDisabled = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEGFR(event.target.value);
+    const eventValue = event.target.value;
+
+    if (eventValue.trim().length !== 0) {
+      setIsChipDisabled(true);
+    } else {
+      setIsChipDisabled(false);
+    }
+  };
+
+  const chipDisabled = () => {
+    setChipChecked((v) => !v);
+    if (chipChecked === true) {
+      setIsEGFRDisabled(false);
+    } else {
+      setIsEGFRDisabled(true);
+    }
+  };
 
   return (
     <MantineProvider>
@@ -601,35 +719,47 @@ export default function Calculator() {
                   <div
                     className={`horizontal-right ${isActive ? "active" : ""}`}
                   >
-                    <NumberInput
+                    <TextInput
                       id="cholesterol"
+                      disabled={isDisabled}
+                      onChange={changeCholesterolDisabled}
+                      value={cholesterol}
                       withAsterisk
                       placeholder="Ratio of total cholesterol to HDL cholesterol"
                       description=""
                       radius="md"
-                      {...form.getInputProps("cholesterol")}
+                      ref={cRef}
+                      // {...form.getInputProps("cholesterol")}
                     />
                     <div className="short-input-wrapper">
-                      <NumberInput
-                        className="short-input-total"
+                      <TextInput
                         id="cholesterolTotal"
+                        className="short-input-total"
+                        value={total}
+                        onChange={changeTotalDisabled}
+                        disabled={isMultiDisabled}
                         label=""
                         placeholder="Total"
                         description=""
                         rightSection="mmol/L"
                         radius="md"
                         rightSectionWidth={92}
-                        {...form.getInputProps("cho_total")}
+                        ref={cRef1}
+                        // {...form.getInputProps("cho_total")}
                       />
-                      <NumberInput
+                      <TextInput
                         className="short-input-high-density"
+                        value={density}
+                        onChange={changeDensityDisabled}
+                        disabled={isMultiDisabled}
                         label=""
                         placeholder="high-density"
                         description=""
                         rightSection="mmol/L"
                         radius="md"
                         rightSectionWidth={92}
-                        {...form.getInputProps("cho_short")}
+                        ref={cRef1}
+                        // {...form.getInputProps("cho_short")}
                       />
                     </div>
 
@@ -696,9 +826,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="horizontal">
-                  <Label
-                    labelName="Known history of ECG confirmed atrial fibrillation"
-                  ></Label>
+                  <Label labelName="Known history of ECG confirmed atrial fibrillation"></Label>
                   <div className="horizontal-right">
                     <Radio.Group
                       name="Known history of ECG confirmed atrial fibrillation"
@@ -711,9 +839,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="horizontal">
-                  <Label
-                    labelName="Socioeconomic status"
-                  ></Label>
+                  <Label labelName="Socioeconomic status"></Label>
                   <div className="horizontal-right">
                     <TextInput
                       withAsterisk
@@ -806,19 +932,26 @@ export default function Calculator() {
                           labelRequired="*"
                         ></Label>
                         <div className="horizontal-right or-type">
-                          <NumberInput
+                          <TextInput
                             className="or-type-left"
+                            onChange={changeHbA1cDisabled}
+                            value={hbA1c}
+                            disabled={isHDisabled1}
                             placeholder="Enter value"
                             rightSection="mmol/mol"
                             radius="md"
                             withAsterisk
                             rightSectionWidth={96}
-                            {...form.getInputProps("HbA1c")}
+                            // ref={hRef}
+                            // {...form.getInputProps("HbA1c")}
                           />
                           <span>or</span>
-                          <NumberInput
+                          <TextInput
                             className="or-type-right"
                             placeholder="Enter value"
+                            disabled={isHDisabled}
+                            onChange={changeHbA1cDisabled1}
+                            value={hbA1c1}
                             rightSection="%"
                             radius="md"
                             withAsterisk
@@ -845,7 +978,10 @@ export default function Calculator() {
                       <div className="horizontal">
                         <Label labelName="eGFR" labelRequired="*"></Label>
                         <div className="horizontal-right or-type">
-                          <NumberInput
+                          <TextInput
+                            onChange={changeEGFRDisabled}
+                            disabled={isEGFRDisabled}
+                            value={eGFR}
                             className="or-type-left or-type-flex-2"
                             id="eGFR"
                             placeholder="Enter value"
@@ -853,13 +989,16 @@ export default function Calculator() {
                             radius="md"
                             withAsterisk
                             rightSectionWidth={140}
-                            {...form.getInputProps("eGFR")}
+                            // {...form.getInputProps("eGFR")}
                           />
                           <span>or</span>
                           <Chip
                             size="lg"
                             radius="md"
                             id="eGFRChip"
+                            disabled={isChipDisabled}
+                            checked={chipChecked}
+                            onChange={chipDisabled}
                             className="chip or-type-right"
                           >
                             eGFR&gt;=90

@@ -100,7 +100,7 @@ const mantineTheme: MantineThemeOverride = {
             width: "100%",
           },
           '& .mantine-Input-wrapper': {
-            '& .mantine-NumberInput-invalid + .mantine-Input-rightSection': {
+            '& .mantine-Input-invalid + .mantine-Input-rightSection': {
               color: "#fa5252",
             }
           },
@@ -114,6 +114,10 @@ const mantineTheme: MantineThemeOverride = {
                   width: "100%",
                   textAlign: "center",
                 },
+              '&[data-disabled]': {
+                border: "1px solid #CFD8DB",
+                backgroundColor: "#EDEFF1 !important",
+              },
               }
             }
           },
@@ -121,6 +125,11 @@ const mantineTheme: MantineThemeOverride = {
         '.mantine-InputWrapper-root': {
           marginTop: 0,
         },
+        '.mantine-Input-disabled': {
+          border: "1px solid #CFD8DB",
+          backgroundColor: "#EDEFF1",
+          opacity: 1,
+        }
       }
     }
   })
